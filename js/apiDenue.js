@@ -25,11 +25,6 @@ var establecimientos = function() {
 		$.ajax({
 			url: urlApiBusqueda,
 			dataType: 'JSON',
-			/*statusCode: {
-    			404: function() {
-    				swal("Aviso!", "Ingresó datos incorrectos, por ende no puede encontrar lo que está buscando, verifique e intente de nuevo.", "warning");
-    			}
-  			},*/
   			beforeSend: function() {
   				swal("Buscando información ... ", "Buscando información, puede tardar unos segundos ...", "success");
   			},
