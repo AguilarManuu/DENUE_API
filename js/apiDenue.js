@@ -5,7 +5,9 @@ jQuery(document).ready(function() {
 	* Cuando ya tengas tu token reemplaza el texto 'AQUÍ_VA_TU_TOKEN' de la siguiente variable con él.
 	*/
 	$('[data-toggle="tooltip"]').tooltip();
+	// Detecta el submit del formulario de nuestro index.php
 	jQuery('.form-buscar').submit(function(event) {
+		// Aquí se manda a llamar la funión que muestra en el index.php
 		establecimientos();
 	});
 });
@@ -13,10 +15,12 @@ var token = 'AQUÍ_VA_TU_TOKEN';
 
 var establecimientos = function() {
 	event.preventDefault();
+	// Obtener los valores de los inputs en el index.php
 	var nombre = $('#nombre').val();
 	var longitud = $('#lon').val();
 	var latitud = $('#lat').val();
 	var metros = $('#mts').val();
+	// Aquí se usa la API, lo único que necesitamos es pasarle los parámetros(datos) que requiere
 	var urlApiBusqueda = "http://www3.inegi.org.mx/sistemas/api/denue/v1/consulta/buscar/" + nombre +"/" + latitud + "," + longitud + "/" + metros + "/" + token;
 		
 	if(token.includes('AQUÍ')){
@@ -33,13 +37,14 @@ var establecimientos = function() {
 				mostrarEstablecimientos(result, nombre);
 			},
 			error: function(e) {
+				// Cuando ocurre algún error
+				console.error(e);
 				swal.close();
 				if (e.responseText == "No hay resultados.") {
 					swal("Error!", "" + e.responseText, "warning");
 				}else{
 					swal("Error!", "" + e.responseText, "error");
 				}
-				console.error(e);
 			}
 
 		});
@@ -47,9 +52,10 @@ var establecimientos = function() {
 }
 
 var mostrarEstablecimientos = function(establecimientos, nombre) {
+	// Hay más campos disponibles para usar que trae el array de objetos establecimientos
 	console.log(establecimientos);
-	var contenido = '';
-	var contador = 0;
+	var contenido = ''; // Aquí se almacena y construye el contenido que se muestra en index.php
+	var contador = 0; // Para almacenar la cantidad de datos encontrados
 	for( i = 0; i < establecimientos.length; i ++){
 		contador ++;
 		contenido += '<div class="col-sm-3"><div class="card" style="width: 16rem;">' +
@@ -61,7 +67,7 @@ var mostrarEstablecimientos = function(establecimientos, nombre) {
 			  		'</div>' +
 				'</div></div>';
 	}
-	$('#establecimientos').html(contenido);
+	$('#establecimientos').html(contenido); // Mostramos en un div en index.php con el id
 	if (contador > 0)
 		swal(contador + " "+ nombre, "Se ecnontraron en el lugar establecido", "success");
 	else
